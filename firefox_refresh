@@ -4,25 +4,25 @@
 # This uses mostly marionette for the injection of a javascript and to control firefox. 
 # I have found setting the settings with marionette are more elegant and better than attempting to do any "hardware clicks"
 
-# using the default firefox profile loacation and searching for it to make sure. Using absolute path to prevent issues with cronjob
-FF_PROFILE_DIR=$(find /home/USER_NAME/.mozilla/firefox -maxdepth 1 -type d -name "*.default*" | head -n 1)
+# using the default firefox profile location and searching for it to make sure. Using absolute path to prevent issues with cronjob
+FF_PROFILE_DIR=$(find /home/$(whoami)/.mozilla/firefox -maxdepth 1 -type d -name "*.default*" | head -n 1)
 # now injecting in settings that will streamline firefox and make it more suitable to low memory locations such as a Nuc as requested 
 # this ensures that the settings are not changed by firefox who seems to have a very odd behavior on certain settings
 if [ -n "$FF_PROFILE_DIR" ]
 then
 cat <<EOF > "$FF_PROFILE_DIR/user.js"
-# disable disk cache to prevent io overhead
+// disable disk cache to prevent io overhead
 user_pref("browser.cache.disk.enable", false);
-# set limited memory 
+// set limited memory 
 user_pref("browser.cache.memory.enable", true);
-# set to 256 M
+// set to 256 M
 user_pref("browser.cache.memory.capacity", 256000);
-# limit the number of processes allowed
+// limit the number of processes allowed
 user_pref("dom.ipc.processCount", 2);
-# remove extra telemetry and other items
+// remove extra telemetry and other items
 user_pref("toolkit.telemetry.enabled", false);
 user_pref("extensions.pocket.enabled", false);
-# set javascript to aggressively manage memory
+// set javascript to aggressively manage memory
 user_pref("javascript.options.mem.max", 1024);
 EOF
 fi 
@@ -72,6 +72,9 @@ try:
 		return "Error Could not play"
 	}
 	"""
+# running the script
+client.execute_script(umute_script);
+
 # return a cannot connect error cause marionette is either not enabled or browser is not open. 
 
 except Exception as e:
@@ -79,11 +82,11 @@ except Exception as e:
 # clean up sessions
 finally:
 	#  if the client session still exists
-	if 'client' in locals(); 
+	if 'client' in locals(): 
 		try: 
 			# delete it
-			client.delete.session()
-		except Exeception:
+			client.delete_session()
+		except Exception:
 			pass # the client session is dead don't need to kill it. 
 
 EOF
