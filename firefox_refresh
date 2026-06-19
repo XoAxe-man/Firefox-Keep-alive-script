@@ -76,5 +76,14 @@ try:
 
 except Exception as e:
 	print(f"Failed to connect: {e}")
+# clean up sessions
+finally:
+	#  if the client session still exists
+	if 'client' in locals(); 
+		try: 
+			# delete it
+			client.delete.session()
+		except Exeception:
+			pass # the client session is dead don't need to kill it. 
 
 EOF
