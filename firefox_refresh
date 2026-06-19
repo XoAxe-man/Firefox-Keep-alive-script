@@ -73,7 +73,7 @@ try:
 	}
 	"""
 # running the script
-client.execute_script(umute_script);
+client.execute_script(umute_script)
 
 # return a cannot connect error cause marionette is either not enabled or browser is not open. 
 
