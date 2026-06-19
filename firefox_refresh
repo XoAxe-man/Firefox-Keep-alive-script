@@ -51,7 +51,7 @@ try:
 	try: 
     # since we are refreshing the page, I am going into the storage of the defaults for the player and setting to them required settings of unmutted and playing
 		client.execute_script("localStorage.setItem('video-muted', '{\default\"false}');")
-		client.execute_script("LocalStorage.setItem('volume', '1.0');")
+		client.execute_script("localStorage.setItem('volume', '1.0');")
 	except:
 		# if we are not able to, we just pass along so far this method has never failed
        pass
