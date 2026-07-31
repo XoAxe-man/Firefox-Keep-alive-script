@@ -32,7 +32,7 @@ echo "$(date): Starting Firefox Refresh script"
 
 # python scripting
 
-/usr/bin/python3 - <<EOF
+/usr/bin/python3 - <<'EOF'
 
 # load marionette driver so we can control firefox and time so there is a delay for the vm to load the page
 
