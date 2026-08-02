@@ -7,18 +7,6 @@
 # using the default firefox profile location and searching for it to make sure. Using absolute path to prevent issues with cronjob
 FF_PROFILE_DIR=$(find /home/$(whoami)/.mozilla/firefox -maxdepth 1 -type d -name "*.default*" | head -n 1)
 
-# check to see if firefox is active and has not been closed normally due to an Firefox update that experimentally appears to happen about every two weeks. 
-
-if ! pgrep -x "firefox" > /dev/null; then
-     echo "$(date): No firefox found reinstating instance"
-# launching firefox as it has not been detected
-     nohup firefix --marionette > /dev/null 2>1$1 &
-# wait about 15 seconds to allow the instance to load
-     sleep 15
-else
-     echo "$(date): Firefox is running"
-fi
-
 # now injecting in settings that will streamline firefox and make it more suitable to low memory locations such as a Nuc as requested 
 # this ensures that the settings are not changed by firefox who seems to have a very odd behavior on certain settings
 if [ -n "$FF_PROFILE_DIR" ]
@@ -39,6 +27,18 @@ user_pref("extensions.pocket.enabled", false);
 user_pref("javascript.options.mem.max", 1024);
 EOF
 fi 
+
+# check to see if firefox is active and has not been closed normally due to an Firefox update that experimentally appears to happen about every two weeks. 
+
+if ! pgrep -x "firefox" > /dev/null; then
+     echo "$(date): No firefox found reinstating instance"
+# launching firefox as it has not been detected
+     nohup firefix --marionette > /dev/null 2>1$1 &
+# wait about 15 seconds to allow the instance to load
+     sleep 15
+else
+     echo "$(date): Firefox is running"
+fi
 
 # echo to allow logging and make sure any cronjob functions
 echo "$(date): Starting Firefox Refresh script"
